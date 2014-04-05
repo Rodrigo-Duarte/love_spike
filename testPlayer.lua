@@ -44,4 +44,14 @@ function TestPlayer:testFront()
   assertTable(player.front(), { x = 75, y = 150 })
   assertTable(player.facing(), { x = 0, y = 1 })
 end
+
+function TestPlayer:testUpdate()
+  local player = createPlayer(50,90)
+  player.move(0,10)
+  controls["up"] = 1
+  player:update(1)
+  assertEquals(player.x(), 50)
+  assertEquals(player.y(), 0)
+end
+
 LuaUnit:run()
