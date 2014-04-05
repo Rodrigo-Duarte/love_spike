@@ -1,10 +1,12 @@
 require('player')
 require('shot')
 require('control')
+require('target')
 
 function love.load()
 	player = createPlayer()
-	artifacts = {player}
+  local target = Target:new(200,100)
+	artifacts = {player, target}
 end
 
 function love.update(dt)
