@@ -50,7 +50,8 @@ function assertError(f, ...)
 	error( "No error generated", 2 )
 end
 
-function assertEquals(actual, expected)
+function assertEquals(actual, expected, message)
+	message = message or ""
 	-- assert that two values are equal and calls error else
 	if  actual ~= expected  then
 		local function wrapValue( v )
@@ -63,10 +64,10 @@ function assertEquals(actual, expected)
 
 		local errorMsg
 		if type(expected) == 'string' then
-			errorMsg = "\nexpected: "..wrapValue(expected).."\n"..
+			errorMsg = message.."\nexpected: "..wrapValue(expected).."\n"..
                              "actual  : "..wrapValue(actual).."\n"
 		else
-			errorMsg = "expected: "..wrapValue(expected)..", actual: "..wrapValue(actual)
+			errorMsg = message.."expected: "..wrapValue(expected)..", actual: "..wrapValue(actual)
 		end
 		print (errorMsg)
 		error( errorMsg, 2 )
@@ -374,3 +375,8 @@ LuaUnit = {
 	end
 -- class LuaUnit
 
+function assertTable(actual, expected)
+  	for key, val in pairs(expected) do 
+    	assertEquals(actual[key], expected[key], key.." -> ")
+  	end
+end
