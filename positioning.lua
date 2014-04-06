@@ -30,7 +30,6 @@ function Position:translate(dx, dy)
   self.y = self.y + dy
   local newFacing = Directions:which(ox,oy,self.x,self.y)
   if newFacing then
-    print('changing'..newFacing.x..newFacing.y)
     self.facing = newFacing
   end
 end

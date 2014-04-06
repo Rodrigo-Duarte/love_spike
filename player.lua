@@ -15,6 +15,8 @@ function createPlayer(initialX,initialY)
     forward = function(dt)
       player.position:translate(player.position.facing.x*dt,player.position.facing.y*dt)
     end,
+    position = player.position,
+    size = player.size,
 		x =  function() return player.position.x end,
 		y =  function() return player.position.y end,
 		facing =  function() return player.position.facing end ,
@@ -32,6 +34,8 @@ function createPlayer(initialX,initialY)
     update = function(self, dt)
       self.move((self.speed * dt * (controls["right"] - controls["left"])),
 	            (self.speed * dt * (controls["down"] - controls["up"])))
+    end,
+    informCollision = function(self, other, box)
     end
 	}
 end

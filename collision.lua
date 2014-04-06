@@ -19,3 +19,24 @@ function CheckCollision(x1,y1,w1,h1, x2,y2,w2,h2)
            y1 < y2+h2 and
            y2 < y1+h1
 end
+
+Collider = {}
+function Collider:checkCollisions(boxes)
+  local all = {}
+  for i, a in ipairs(boxes) do
+    for i2, b in ipairs(boxes) do
+      if i ~= i2 then
+        local inters = intersection(a,b)
+        if inters then
+          table.insert(all, inters)
+          --print('---')
+          --for k,v in pairs(a) do print(k,v) end
+          --print('===')
+          a:informCollision(b, inters)
+        end
+      end
+    end
+  end
+  --for k,v in pairs(all) do print(k,v) end
+  return all
+end
