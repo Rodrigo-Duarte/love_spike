@@ -1,6 +1,6 @@
 require('Positioning')
 
-Target = { hp = 10, position = Position:new(), size = 25 }
+Target = { hp = 10, position = Position:new(), size = 25, image = love.graphics.newImage('iTarget.png') }
 
 function Target:new(x,y)
   self.position = Position:new{x = x, y = y}
@@ -18,8 +18,8 @@ end
 
 function Target:draw(graphics)
   if self:isDestroyed() then return end
-  graphics.setColor(0,200,0,200)
-  graphics.circle("fill", self.position.x, self.position.y, self.size, 10)
+  graphics.setColor(255,255,255,255)
+  graphics.draw( self.image, self.position.x, self.position.y )
 end
 
 function Target:update(dt)

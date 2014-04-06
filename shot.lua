@@ -1,6 +1,6 @@
 require('Positioning')
 
-Shot = { speed = 200, size = 5 }
+Shot = { speed = 200, size = 5, image = Animation:new(love.graphics.newImage('iexp.png'), 96, 96, 1) }
 
 function Shot:new(owner)
   o = { owner = owner, position = Position:new( owner.front() ) }
@@ -10,11 +10,12 @@ function Shot:new(owner)
 end
 
 function Shot:draw(graphics)
-  graphics.setColor(255,0,0,255)
-  graphics.circle("fill", self.position.x, self.position.y, self.size, 5)
+  graphics.setColor(255,255,255,255)
+  self.image:draw(graphics, self.position.x, self.position.y)
 end
 
 function Shot:update(dt)
+  self.image:update(dt)
   self.position:translate(dt * self.speed * self.position.facing.x, dt * self.speed * self.position.facing.y)
 end
 

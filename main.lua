@@ -1,3 +1,4 @@
+require('anim')
 require('player')
 require('shot')
 require('control')
