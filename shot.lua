@@ -1,5 +1,6 @@
 require('Positioning')
 require('anim')
+
 Shot = { speed = 200, size = 5, shotsFired = {}, ttl = 2 }
 
 function Shot:new(owner)
