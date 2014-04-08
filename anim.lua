@@ -1,7 +1,7 @@
 Animation = {}
 
 function Animation:new(image, w, h, t)
-  o = { image = image, w = w, h = h, t = t, ct = 0 }
+  local o = { image = image, w = w, h = h, t = t, ct = 0 }
   setmetatable(o,self)
   self.__index = self
   return o

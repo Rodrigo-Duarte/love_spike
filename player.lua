@@ -34,6 +34,7 @@ function createPlayer(initialX,initialY)
     update = function(self, dt)
       self.move((self.speed * dt * (controls["right"] - controls["left"])),
 	            (self.speed * dt * (controls["down"] - controls["up"])))
+      if controls[" "] == 1 then Shot:new(self) end
     end,
     informCollision = function(self, other, box)
     end

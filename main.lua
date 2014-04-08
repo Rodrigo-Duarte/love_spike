@@ -1,3 +1,10 @@
+artifacts = {}
+remove = function(atable, value)
+  for i,v in ipairs(atable) do
+    if v == value then print(atable, i, v, value) table.remove(atable, i) return end
+  end
+end
+
 require('anim')
 require('player')
 require('shot')
@@ -6,9 +13,10 @@ require('target')
 require('collision')
 
 function love.load()
-	player = createPlayer()
+	local player = createPlayer()
   local target = Target:new(200,100)
-	artifacts = {player, target}
+  table.insert(artifacts, player)
+  table.insert(artifacts, target)
 end
 
 function love.update(dt)
@@ -16,9 +24,6 @@ function love.update(dt)
     artifact:update(dt)
   end
   Collider:checkCollisions(artifacts)
-  if controls[" "] == 1 then
-    table.insert(artifacts, Shot:new(player))
-  end
 end
 
 function love.draw()
