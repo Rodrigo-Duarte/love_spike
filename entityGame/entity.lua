@@ -131,10 +131,6 @@ function Engine:update(dt)
   for i,v in ipairs(self.systems) do
     v:update(dt, self.nodes)
   end
-
-  for i,v in ipairs(self.entities) do
-    print(i,v,v:get(PositionComponent).x,v:get(PositionComponent).y)
-  end
 end
 
 function Engine:draw()
@@ -158,11 +154,7 @@ setmetatable(RenderSystem, {__index = System})
 
 function RenderSystem:update(dt, nodes)
   for i,v in ipairs(nodes[RenderNode]) do
-    print('Render',i,v,v.image,v.position.x,v.position.y,v)
-    love.graphics.setColor(120,20,120,200)
-    love.graphics.draw(v.image.image, v.position.x, v.position.y, v.position.r)
-    love.graphics.rectangle("fill", v.position.x, v.position.y, 50,50)
-    --print(i, v.position.x, v.position.y, v.position.r, v.image.image)
+    love.graphics.draw(v.image.image, v.position.x, v.position.y,v.position.r,1,1, 25,25)
   end
 end
 
@@ -172,8 +164,9 @@ setmetatable(MoveSystem, {__index = System})
 
 function MoveSystem:update(dt, nodes)
   for i,v in ipairs(nodes[MoveNode]) do
-    v.position.x = v.position.x + v.velocity.x * dt
-    v.position.y = v.position.y + v.velocity.y * dt
+    print(math.sin(v.position.r), math.cos(v.position.r), v.position.r)
+    v.position.x = v.position.x + (v.velocity.x * dt) * math.sin(v.position.r) + (-v.velocity.y * dt) * math.sin(v.position.r)
+    v.position.y = v.position.y + v.velocity.y * dt * math.cos(v.position.r) + (v.velocity.x * dt) * math.cos(v.position.r)
     v.position.r = v.position.r + v.velocity.r * dt
   end
 end
@@ -184,7 +177,6 @@ setmetatable(ControlSystem, { __index = System })
 
 function ControlSystem:update(dt, nodes)
   for i,v in ipairs(nodes[ControlNode]) do
-    print('Control',i,v)
     v.velocity.x = v.velocity.x + (dt * v.control.accel * (v.control:getInt("e") - v.control:getInt("q")))
     v.velocity.y = v.velocity.y + (dt * v.control.accel * (v.control:getInt("s") - v.control:getInt("w")))
     v.velocity.r = v.velocity.r + (dt * v.control.accel/50 * (v.control:getInt("d") - v.control:getInt("a")))
