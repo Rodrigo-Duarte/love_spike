@@ -1,4 +1,6 @@
 require('entity')
+require('entities')
+
 artifacts = {}
 remove = function(atable, value)
   for i,v in ipairs(atable) do
@@ -9,6 +11,12 @@ end
 function love.load()
   local aorb = createOrb(50, 50)
   Engine:addEntity(aorb)
+
+  local player = createPlayer(100,100)
+  Engine:addEntity(player)
+
+  Engine:addSystem(ControlSystem:new())
+  Engine:addSystem(MoveSystem:new())
   Engine:addSystem(RenderSystem:new())
 end
 
