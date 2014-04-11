@@ -6,6 +6,7 @@ createOrb = function(x,y)
   o.__index = o -- ??
   o:add(PositionComponent:new(x,y,0))
   o:add(RenderComponent:new(love.graphics.newImage("target.png")))
+  o:add(SizeComponent:new(50,50))
   return o
 end
 
@@ -21,5 +22,6 @@ createPlayer = function(x,y)
   o:add(VelocityComponent:new(0,0,0))
   o:add(RenderComponent:new(love.graphics.newImage("triangle.png")))
   o:add(ControlComponent:new())
+  o:add(SizeComponent:new(50,50))
   return o
 end

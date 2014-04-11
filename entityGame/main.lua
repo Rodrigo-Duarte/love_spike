@@ -18,6 +18,7 @@ function love.load()
   Engine:addSystem(ControlSystem:new())
   Engine:addSystem(MoveSystem:new())
   Engine:addSystem(RenderSystem:new())
+  Engine:addSystem(CollisionSystem:new())
 end
 
 function love.update(dt)
