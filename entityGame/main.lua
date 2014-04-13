@@ -1,5 +1,9 @@
+require('engine')
 require('entity')
-require('entities')
+require('control')
+require('component')
+require('node')
+require('system')
 
 artifacts = {}
 remove = function(atable, value)
