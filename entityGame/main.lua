@@ -9,10 +9,10 @@ remove = function(atable, value)
 end
 
 function love.load()
-  local aorb = createOrb(50, 50)
+  local aorb = createOrb(350, 400)
   Engine:addEntity(aorb)
 
-  local player = createPlayer(100,100)
+  local player = createPlayer(300,400)
   Engine:addEntity(player)
 
   Engine:addSystem(ControlSystem:new())

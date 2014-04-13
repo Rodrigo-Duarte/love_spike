@@ -58,6 +58,15 @@ function VelocityComponent:new(x,y,r)
   return pos
 end
 
+CollisionComponent = { notify = function() end}
+CollisionComponent.__index = CollisionComponent
+
+function CollisionComponent:new(behavior)
+  local pos = { notify = behavior }
+  setmetatable(pos, CollisionComponent)
+  pos.__index = pos
+  return pos
+end
 ------------------------------------
 Node = {}
 
@@ -94,12 +103,12 @@ function MoveNode:new(entity)
   return rn
 end
 
-CollisionNode = { position = {}, size = {} }
+CollisionNode = { position = {}, size = {}, collision = {} }
 setmetatable(CollisionNode, { __index = Node })
 
 function CollisionNode:new(entity)
-  local rn = { position = entity:get(PositionComponent), size = entity:get(SizeComponent) }
-  if not rn.position or not rn.size then return nil end
+  local rn = { position = entity:get(PositionComponent), size = entity:get(SizeComponent), collision = entity:get(CollisionComponent) }
+  if not rn.position or not rn.size or not rn.collision then return nil end
   rn.__index = rn
   setmetatable(rn, CollisionNode)
   return rn
@@ -115,6 +124,10 @@ end
 
 function Entity:remove(comp)
   remove(self.components, comp)
+end
+
+function Entity:notify(msg, ...)
+  print('Notified',msg,...)
 end
 
 function Entity:get(compClass)
@@ -208,10 +221,15 @@ CollisionSystem.__index = CollisionSystem
 setmetatable(CollisionSystem, { __index = System })
 
 function CollisionSystem:update(dt, nodes)
-  for i,v in ipairs(nodes[CollisionNode]) do
+  for i1,v1 in ipairs(nodes[CollisionNode]) do
     for i2,v2 in ipairs(nodes[CollisionNode]) do
-      if i ~= i2  and self:isColliding(v,v2) then
-        print(self:intersection(v,v2))
+      if i1 ~= i2  and self:isColliding(v1,v2) then
+        local intersect = self:intersection(v1,v2)
+        --v1.entity:notify('collision', v2.entity, intersect)
+        --v2.entity:notify('collision', v1.entity, intersect)
+        print('collision!')
+        v1.collision.notify(v2, intersect)
+        v2.collision.notify(v1, intersect)
       end
     end
   end
