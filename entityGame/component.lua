@@ -28,7 +28,7 @@ function RenderComponent:new(image)
   return pos
 end
 
-ControlComponent = { accel = 100 }
+ControlComponent = { accel = 500 }
 ControlComponent.__index = ControlComponent
 
 function ControlComponent:new()
@@ -46,11 +46,11 @@ function ControlComponent:getInt(key)
   if self:getPressed(key) then return 1 else return 0 end
 end
 
-VelocityComponent = {x = 0, y = 0, r = 0}
+VelocityComponent = {x = 0, y = 0, r = 0, max = 0}
 VelocityComponent.__index = VelocityComponent
 
-function VelocityComponent:new(x,y,r)
-  local pos = {x = x, y=y, r=r}
+function VelocityComponent:new(x,y,r, max)
+  local pos = {x = x, y=y, r=r, max = max}
   setmetatable(pos, VelocityComponent)
   pos.__index = pos
   return pos

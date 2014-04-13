@@ -16,18 +16,42 @@ function RenderSystem:update(dt, nodes)
     love.graphics.draw(v.image.image, v.position.x, v.position.y,v.position.r,1,1, 25,25)
   end
 end
-
+---------------------------------------------------------
 MoveSystem = {}
 MoveSystem.__index = MoveSystem
 setmetatable(MoveSystem, {__index = System})
 
 function MoveSystem:update(dt, nodes)
   for i,v in ipairs(nodes[MoveNode]) do
+    v.position.x = v.position.x + v.velocity.x * dt
+    v.position.y = v.position.y + v.velocity.y * dt
+    if math.abs(v.velocity.x) > 5 then v.velocity.x = v.velocity.x + 5 * (v.velocity.x < 0 and 1 or -1) else v.velocity.x = 0 end
+    if math.abs(v.velocity.y) > 5 then v.velocity.y = v.velocity.y + 5 * (v.velocity.y < 0 and 1 or -1) else v.velocity.y = 0 end
+    if math.abs(v.velocity.x) > 1 or math.abs(v.velocity.y) > 1 then
+      if math.abs(v.velocity.x) > math.abs(v.velocity.y) then
+        if v.velocity.x < 0 then v.position.r = math.rad(270)
+        else v.position.r = math.rad(90) end
+      else
+        if v.velocity.y < 0 then v.position.r = math.rad(0) 
+        else v.position.r = math.rad(180) end
+      end
+    end
+  end
+end
+---------------------------------------------------------
+
+ShipMoveSystem = {}
+ShipMoveSystem.__index = MoveSystem
+setmetatable(ShipMoveSystem, {__index = System})
+
+function ShipMoveSystem:update(dt, nodes)
+  for i,v in ipairs(nodes[MoveNode]) do
     v.position.x = v.position.x + (v.velocity.x * dt) * math.sin(v.position.r) + (-v.velocity.y * dt) * math.sin(v.position.r)
     v.position.y = v.position.y + v.velocity.y * dt * math.cos(v.position.r) + (v.velocity.x * dt) * math.cos(v.position.r)
     v.position.r = v.position.r + v.velocity.r * dt
   end
 end
+---------------------------------------------------------
 
 ControlSystem = {}
 ControlSystem.__index = ControlSystem
@@ -35,12 +59,30 @@ setmetatable(ControlSystem, { __index = System })
 
 function ControlSystem:update(dt, nodes)
   for i,v in ipairs(nodes[ControlNode]) do
+    local vx = v.velocity.x + (dt * v.control.accel * (v.control:getInt("d") - v.control:getInt("a")))
+    if math.abs(vx) < v.velocity.max then v.velocity.x = vx end
+    local vy = v.velocity.y + (dt * v.control.accel * (v.control:getInt("s") - v.control:getInt("w")))
+    if math.abs(vy) < v.velocity.max then v.velocity.y = vy end
+  end
+end
+---------------------------------------------------------
+
+CollisionSystem = {}
+CollisionSystem.__index = CollisionSystem
+setmetatable(CollisionSystem, { __index = System })
+--------------------------------------------------------
+
+ShipControlSystem = { __index = ShipControlSystem }
+setmetatable(ShipControlSystem, { __index = System })
+
+function ShipControlSystem:update(dt, nodes)
+  for i,v in ipairs(nodes[ControlNode]) do
     v.velocity.x = v.velocity.x + (dt * v.control.accel * (v.control:getInt("e") - v.control:getInt("q")))
     v.velocity.y = v.velocity.y + (dt * v.control.accel * (v.control:getInt("s") - v.control:getInt("w")))
     v.velocity.r = v.velocity.r + (dt * v.control.accel/50 * (v.control:getInt("d") - v.control:getInt("a")))
   end
 end
-
+---------------------------------------------------------
 CollisionSystem = {}
 CollisionSystem.__index = CollisionSystem
 setmetatable(CollisionSystem, { __index = System })
